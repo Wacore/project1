@@ -1,0 +1,11 @@
+.form-section {
+    display: grid;
+    place-items: center;
+    height: calc(100vh - 3rem);
+}
+
+.login-form {
+    width: 350px;
+    max-width: 500px;
+    /* background-color: #f0f0f0; */
+}

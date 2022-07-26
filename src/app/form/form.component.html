@@ -1,0 +1,42 @@
+<div class="form-section">
+    <div class="form-container">
+        <h1 class="text-5xl italic text-orange-500 text-center font-bold">{{formTitle}}</h1>
+        <form #f="ngForm" (ngSubmit)="submit(f)" class="login-form p-4">
+            <div class="form-group flex flex-col my-2">
+                <label for="username" class="my-2 font-bold">Username</label>
+                <input ngModel name="username" #username="ngModel" required minlength="3" id="username" type="text"
+                    class="form-control border-solid border-2 p-2" placeholder="Username">
+                <div class="error-alert py-1 text-red-600" *ngIf="username.touched && !username.valid">
+                    <div *ngIf="username.errors?.['required']">First name is required</div>
+                    <div *ngIf="username.errors?.['minlength']">First name should be minimum 3 characters</div>
+                </div>
+            </div>
+            <div class="form-group flex flex-col my-2">
+                <label for="password" class="my-2 font-bold">Password</label>
+                <input ngModel name="password" #password="ngModel" required minlength="3" id="password" type="password"
+                    class="form-control border-solid border-2 p-2" placeholder="Password">
+                <div class="error-alert py-1 text-red-600" *ngIf="password.touched && !password.valid">
+                    <div *ngIf="password.errors?.['required']">Password is required</div>
+                    <div *ngIf="password.errors?.['minlength']">Password should be minimum 3 characters</div>
+                </div>
+            </div>
+            <div *ngIf="isLogin">
+                <button class="btn" [disabled]="!f.valid"
+                    class="block w-full text-center bg-orange-500 py-3 px-5 text-slate-100">Login</button>
+            </div>
+            <div *ngIf="!isLogin">
+                <button class="btn" [disabled]="!f.valid"
+                    class="block w-full text-center bg-orange-500 py-3 px-5 text-slate-100">Sign up</button>
+            </div>
+            <div *ngIf="isLogin" class="checkbox">
+                <label for="haveRemember"><input ngModel name="haveRemember" type="checkbox">Remember me</label>
+            </div>
+            <div class="container flex justify-between items-center mt-8">
+
+                <a *ngIf="isLogin" href="#" class="py-3 px-5 bg-orange-500 inline-block text-white">Sign up</a>
+                <a *ngIf="!isLogin" href="#" class="py-3 px-5 bg-orange-500 inline-block text-white">Login</a>
+                <a *ngIf="isLogin" href="#">Forgot password?</a>
+            </div>
+        </form>
+    </div>
+</div>

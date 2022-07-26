@@ -1,0 +1,14 @@
+<div *ngIf="tableType == 'resource'" class="detail-row flex items-center">
+    <div class="table-header-column flex-1 p-2" *ngFor="let columnId of columnOrder">{{data[columnId]}}
+    </div>
+    <!-- <div class="table-header-column flex-1 p-2" *ngFor="let content of data | keyvalue">{{content.value}}
+    </div> -->
+</div>
+
+<div *ngIf="tableType == 'project'" class="detail-row flex items-center">
+    <div class="table-header-column flex-1 p-2" *ngFor="let columnId of columnOrder; let first = first"><input
+            *ngIf="first" type="checkbox" class="resourceRowCheckbox mr-2" [name]="data[columnId]" #checkbox
+            [value]="data[columnId]" [id]="resourceId" [checked]="isSelected"
+            (change)="selectRowHandler(checkbox.checked, checkbox.id)">{{data[columnId]}}
+    </div>
+</div>

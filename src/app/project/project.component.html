@@ -1,0 +1,11 @@
+{{resourceTableDetail | json}}
+{{selectedResourceTableDetail | json}}
+
+<div class="grid-cols-2 gap-2 grid justify-center items-start w-screen pt-5 mx-auto transition-transform ease-in duration-300"
+    [ngClass]="{'translate-x-1/4': isSideBarOpen}">
+    <app-table [tableType]="tableType" [tableDetail]="resourceTableDetail" [columnInfo]="columnInfo"
+        (selectedResourceArrEvent)="getSelectedResourceArr($event)" [projectTableType]="'resourceTable'"
+        [columnOrder]="columnOrder"></app-table>
+    <app-table [tableType]="tableType" [tableDetail]="selectedResourceTableDetail" [columnInfo]="columnInfo"
+        [projectTableType]="'selectedTable'" [columnOrder]="columnOrder"></app-table>
+</div>
