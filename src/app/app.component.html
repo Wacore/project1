@@ -2,8 +2,13 @@
 <!-- <app-login-form></app-login-form> -->
 <!-- <app-sign-up-form></app-sign-up-form> -->
 <div class="main-container relative">
-    <!-- <app-resource [isSideBarOpen]="isSideBarOpen"></app-resource> -->
-    <app-project [isSideBarOpen]="isSideBarOpen"></app-project>
-    <app-side-navbar [isSideBarOpen]="isSideBarOpen" (toggleSideBarEvent)="toggleSideBarHandler($event)">
-    </app-side-navbar>
+  <!-- <app-resource [isSideBarOpen]="isSideBarOpen"></app-resource> -->
+  <!-- <app-project [isSideBarOpen]="isSideBarOpen"></app-project>
+     -->
+  <router-outlet></router-outlet>
+  <app-side-navbar
+    [isSideBarOpen]="isSideBarOpen"
+    (toggleSideBarEvent)="toggleSideBarHandler($event)"
+  >
+  </app-side-navbar>
 </div>
