@@ -9,6 +9,7 @@
   <app-side-navbar
     [isSideBarOpen]="isSideBarOpen"
     (toggleSideBarEvent)="toggleSideBarHandler($event)"
+    *ngIf="authService.isLoggedIn()"
   >
   </app-side-navbar>
 </div>

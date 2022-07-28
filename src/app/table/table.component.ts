@@ -1,16 +1,16 @@
 import { ResourceService } from './../resource.service';
-import { ColumnInfo } from './../column';
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 @Component({
   selector: 'app-table',
   templateUrl: './table.component.html',
-  styleUrls: ['./table.component.css']
+  styleUrls: ['./table.component.css'],
 })
 export class TableComponent implements OnInit {
   @Input() tableType: string;
   @Input() resourceData: any;
-  @Input() columnInfo: ColumnInfo[];
+  @Input() columnInfo: any;
   @Input() tableDetail: any;
   @Input() projectTableType: string;
   @Input() columnOrder: number[];
@@ -26,13 +26,32 @@ export class TableComponent implements OnInit {
   public newRowObject: any;
   public newRowObjectContent: any;
 
-  constructor(private _resourceService: ResourceService) { }
+  // public columnInfo: any[];
+  // public tableDetail: any[];
+
+  constructor(private _resourceService: ResourceService) {}
 
   ngOnInit(): void {
-    this.renderTableDetail = this.tableDetail.slice(0);
-    console.log(this.tableDetail)
+    // this.renderTableDetail = this.tableDetail.slice(0);
+    // console.log(this.tableDetail, this.columnInfo);
+    console.log(this.tableDetail);
+
+    if (this.tableType == 'resource') {
+      // this._resourceService.currentColumn.subscribe((column) => {
+      //   this.column = column;
+      //   console.log(this.column);
+      // });
+    }
+
+    console.log(this._resourceService.data);
   }
 
+  // ngOnChanges(changes: SimpleChanges) {
+  //   // only run when property "data" changed
+  //   if (changes['tableDetail']) {
+  //     console.log(this.tableDetail);
+  //   }
+  // }
 
   // Methods for Resource Table
   // handle the add row event to toggle displaying the input row
@@ -40,17 +59,17 @@ export class TableComponent implements OnInit {
     this.isAddRow = value;
     const content: any = {};
     this.columnOrder.map((c) => {
-      content[c] = ""
-    })
+      content[c] = '';
+    });
 
     this.newRowObjectContent = content;
   }
 
   confirmResourceHandler() {
     this.newRowObject = {
-      resourceId: Math.round((Math.random() * 100) + 1),
-      content: this.newRowObjectContent
-    }
+      resourceId: Math.round(Math.random() * 100 + 1),
+      content: this.newRowObjectContent,
+    };
 
     this.renderTableDetail.push(this.newRowObject);
     this.resetResourceRowHandler();
@@ -65,14 +84,13 @@ export class TableComponent implements OnInit {
   searchResourceHandler(term: string) {
     this.renderTableDetail = this.renderTableDetail.filter((col: any) => {
       return Object.values(col.content).includes(term);
-    })
-
+    });
   }
 
   // Methods for project table
   allRowSelectionHandler(value: boolean) {
-    console.log(value)
-    this.renderTableDetail.map((row: any) => row.isSelected = value);
+    console.log(value);
+    this.renderTableDetail.map((row: any) => (row.isSelected = value));
     if (value) {
       this.selectedResourceArr = this.renderTableDetail;
       console.log(this.selectedResourceArr);
@@ -84,12 +102,19 @@ export class TableComponent implements OnInit {
 
   rowSelectionHandler(input: any) {
     const { id, check } = input;
-    const index = this.renderTableDetail.findIndex((r: any) => r.resourceId == id);
+    const index = this.renderTableDetail.findIndex(
+      (r: any) => r.resourceId == id
+    );
     this.renderTableDetail[index]['isSelected'] = check;
     if (check) {
-      this.selectedResourceArr = [...this.selectedResourceArr, this.renderTableDetail[index]];
+      this.selectedResourceArr = [
+        ...this.selectedResourceArr,
+        this.renderTableDetail[index],
+      ];
     } else {
-      this.selectedResourceArr = this.selectedResourceArr.filter((r: any) => r.resourceId != id);
+      this.selectedResourceArr = this.selectedResourceArr.filter(
+        (r: any) => r.resourceId != id
+      );
     }
   }
 
@@ -99,5 +124,4 @@ export class TableComponent implements OnInit {
       this.selectedResourceArrEvent.emit(this.selectedResourceArr);
     }
   }
-
 }

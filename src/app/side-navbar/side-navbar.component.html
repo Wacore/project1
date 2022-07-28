@@ -1,24 +1,48 @@
-<div class="side-bar-container absolute z-10 top-0 left-0 max-w-screen-sm bg-gray-800  text-white h-full  ease-in duration-300 transition-width  "
-    [ngClass]="{'w-0': !isSideBarOpen, ' w-1/5': isSideBarOpen}">
-    <ul *ngIf="isSideBarOpen">
-        <li *ngFor="let route of routes"><a
-                class="text-xl mx-5 my-1 font-thin cursor-pointer inline-block">{{route.name}}</a>
-        </li>
-    </ul>
-    <div class="toggle-button  absolute top-0 -right-10 w-10 h-10 bg-gray-800" (click)="toggleSideBar()">
-        <div *ngIf="!isSideBarOpen" class="open"><svg xmlns="http://www.w3.org/2000/svg"
-                class="h-10 w-10 flex justify-center items-center" viewBox="0 0 20 20" fill="currentColor">
-                <path fill-rule="evenodd"
-                    d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                    clip-rule="evenodd" />
-            </svg></div>
-
-        <div *ngIf="isSideBarOpen" class="close">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" viewBox="0 0 20 20" fill="currentColor">
-                <path fill-rule="evenodd"
-                    d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
-                    clip-rule="evenodd" />
-            </svg>
-        </div>
+<div
+  class="side-bar-container absolute z-10 top-0 left-0 max-w-screen-sm bg-gray-800 text-white h-full ease-in duration-300 transition-width"
+  [ngClass]="{ 'w-0': !isSideBarOpen, ' w-1/5': isSideBarOpen }"
+>
+  <ul *ngIf="isSideBarOpen">
+    <li *ngFor="let route of routes">
+      <a
+        [routerLink]="route.link"
+        class="text-xl mx-5 my-1 font-thin cursor-pointer inline-block"
+        >{{ route.name }}</a
+      >
+    </li>
+  </ul>
+  <div
+    class="toggle-button absolute top-0 -right-10 w-10 h-10 bg-gray-800"
+    (click)="toggleSideBar()"
+  >
+    <div *ngIf="!isSideBarOpen" class="open">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-10 w-10 flex justify-center items-center"
+        viewBox="0 0 20 20"
+        fill="currentColor"
+      >
+        <path
+          fill-rule="evenodd"
+          d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+          clip-rule="evenodd"
+        />
+      </svg>
     </div>
+
+    <div *ngIf="isSideBarOpen" class="close">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-10 w-10"
+        viewBox="0 0 20 20"
+        fill="currentColor"
+      >
+        <path
+          fill-rule="evenodd"
+          d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+          clip-rule="evenodd"
+        />
+      </svg>
+    </div>
+  </div>
 </div>

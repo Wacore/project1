@@ -1,11 +1,12 @@
 import { ResourceService } from './../resource.service';
 import { Component, Input, OnInit } from '@angular/core';
 import { ColumnInfo } from '../column';
+import { SidebarService } from '../sidebar.service';
 
 @Component({
   selector: 'app-project',
   templateUrl: './project.component.html',
-  styleUrls: ['./project.component.css']
+  styleUrls: ['./project.component.css'],
 })
 export class ProjectComponent implements OnInit {
   @Input() isSideBarOpen: boolean;
@@ -18,12 +19,19 @@ export class ProjectComponent implements OnInit {
   public resourceTableDetail: any = [];
   public selectedResourceTableDetail: any = [];
 
-  constructor(private _resourceService: ResourceService) { }
+  constructor(
+    private _resourceService: ResourceService,
+    public sidebarService: SidebarService
+  ) {}
 
   ngOnInit(): void {
+    // this.resourceData = this._resourceService.getResourceData();
     this.resourceData = this._resourceService.getData();
-    [this.columnInfo, this.resourceTableDetail] = [this.resourceData.columnInfo, this.resourceData.tableDetail];
-    this.resourceTableDetail.map((data: any) => data.isSelected = false);
+    [this.columnInfo, this.resourceTableDetail] = [
+      this.resourceData.columnInfo,
+      this.resourceData.tableDetail,
+    ];
+    this.resourceTableDetail.map((data: any) => (data.isSelected = false));
     this.getColumnSet();
   }
 

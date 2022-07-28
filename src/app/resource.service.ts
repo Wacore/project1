@@ -1,29 +1,38 @@
 import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { Observable, BehaviorSubject } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ResourceService {
+  private url = 'http://localhost:8080/Kotera/resource';
+  private columnInfo = new BehaviorSubject<any[]>([]);
+  private tableDetail = new BehaviorSubject<any[]>([]);
+  currentColumn = this.columnInfo.asObservable();
+  currentTableDetail = this.tableDetail.asObservable();
+  data: any = [];
+
   private resourceData: any = {
-    columnInfo:
-      [{ columnName: 'resource code', id: 21, type: null, formula: null },
+    columnInfo: [
+      { columnName: 'resource code', id: 21, type: null, formula: null },
       { columnName: 'resource name', id: 20, type: null, formula: null },
       { columnName: 'resource code', id: 21, type: null, formula: null },
-      { columnName: 'resource name', id: 20, type: null, formula: null }],
-    tableDetail: [{ resourceId: 22, content: { 21: '050000', 20: 'Metals' } },
-    { resourceId: 23, content: { 21: "040000", 20: "Masonry" } }]
+      { columnName: 'resource name', id: 20, type: null, formula: null },
+    ],
+    tableDetail: [
+      { resourceId: 22, content: { 21: '050000', 20: 'Metals' } },
+      { resourceId: 23, content: { 21: '040000', 20: 'Masonry' } },
+    ],
   };
 
-  private data: any = {}
-
-  constructor() {
-
-  }
+  constructor(private http: HttpClient) {}
 
   uniqueColumnInfo(col: any[]) {
     const uniqueIds = new Set();
 
-    return col.filter(c => {
+    return col.filter((c) => {
       const isDuplicate = uniqueIds.has(c.id);
 
       uniqueIds.add(c.id);
@@ -32,14 +41,64 @@ export class ResourceService {
         return true;
       }
 
-      return false
-    })
+      return false;
+    });
   }
 
   getData() {
-    this.resourceData.columnInfo = this.uniqueColumnInfo(this.resourceData.columnInfo)
+    this.resourceData.columnInfo = this.uniqueColumnInfo(
+      this.resourceData.columnInfo
+    );
     return this.resourceData;
   }
 
+  private getToken() {
+    return localStorage.getItem('token');
+  }
 
+  private getHttpHeader() {
+    let headers = new HttpHeaders();
+    return headers.append('Authorization', `Bearer ${this.getToken()}`);
+  }
+
+  public getResourceData(): Observable<any> {
+    let headers = this.getHttpHeader();
+    return this.http
+      .get(`${this.url}/read`, { headers, responseType: 'text' })
+      .pipe(map((res) => JSON.parse(res)));
+  }
+
+  public updateColumnInfo(array: any[]) {
+    this.columnInfo.next(array);
+  }
+
+  public updateTableDetail(array: any[]) {
+    this.tableDetail.next(array);
+  }
+
+  // public postResource() {
+  //   let headers = this.getHttpHeader();
+  //   const resourceId = Math.round(Math.random() * 1000 + 1);
+  //   let queryParams = new HttpParams();
+  //   queryParams = queryParams.append('resourceId', resourceId);
+  //   return this.http.post(`${this.url}/addResource`, {
+  //     headers,
+  //     params: queryParams,
+  //     responseType: 'text',
+  //   });
+  // }
+
+  // public setEntry(resourceId: number, columnId: number, value: string) {
+  //   let headers = this.getHttpHeader();
+  //   let queryParams = {
+  //     resourceId,
+  //     columnId,
+  //     value,
+  //   };
+  //   return this.http.post(`${this.url}/setEntry`, {
+  //     headers,
+  //     params: queryParams,
+  //     responseType: 'text',
+  //   });
+  // }
 }

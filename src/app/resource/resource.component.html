@@ -1,5 +1,20 @@
-<div class="grid grid-cols-1 justify-center items-start pt-5 w-3/4 mx-auto transition-transform ease-in duration-300"
-    [ngClass]="{'translate-x-1/4': isSideBarOpen}">
-    <app-table [tableType]="tableType" [resourceData]="resourceData" [columnInfo]="columnInfo"
-        [tableDetail]="tableDetail" [columnOrder]="columnOrder"></app-table>
-</div>
+{{ tableDetail | json }}
+{{ columnInfo | json }}
+
+<!-- <div
+  class="grid grid-cols-1 justify-center items-start pt-5 w-3/4 mx-auto transition-transform ease-in duration-300"
+  [ngClass]="{ 'translate-x-1/4': sidebarSerive.getUpdate() }"
+> -->
+<!-- <app-table
+    [tableType]="tableType"
+    [resourceData]="resourceData "
+    [columnOrder]="columnOrder"
+  ></app-table> -->
+<!-- <app-table
+    [tableType]="tableType"
+    [resourceData]="resourceData"
+    [columnInfo]="columnInfo"
+    [tableDetail]="tableDetail | async"
+    [columnOrder]="columnOrder"
+  ></app-table>
+</div> -->

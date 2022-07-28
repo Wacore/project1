@@ -1,32 +1,26 @@
-
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
+import { SidebarService } from '../sidebar.service';
 
 @Component({
   selector: 'app-side-navbar',
   templateUrl: './side-navbar.component.html',
-  styleUrls: ['./side-navbar.component.css']
+  styleUrls: ['./side-navbar.component.css'],
 })
 export class SideNavbarComponent implements OnInit {
   public routes = [
-    { name: 'Resource', link: '#' },
-    { name: 'Project', link: '#' },
-    { name: 'Formula', link: '#' }
-  ]
+    { name: 'Resource', link: '/' },
+    { name: 'Project', link: '/project' },
+    { name: 'Formula', link: '/#' },
+  ];
   @Input() isSideBarOpen: boolean = false;
   @Output() toggleSideBarEvent = new EventEmitter();
 
+  constructor() {}
 
-  constructor() {
-  }
-
-
-  ngOnInit(): void {
-    console.log(this.isSideBarOpen);
-  }
+  ngOnInit(): void {}
 
   toggleSideBar() {
     this.isSideBarOpen = !this.isSideBarOpen;
     this.toggleSideBarEvent.emit(this.isSideBarOpen);
   }
-
 }

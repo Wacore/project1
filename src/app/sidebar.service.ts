@@ -2,17 +2,17 @@ import { Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class SidebarService {
-  private sidebar = new Subject<any>();
-  constructor() { }
+  private sidebarValue: boolean = false;
+  constructor() {}
 
   sendUpdate(value: boolean) {
-    this.sidebar.next({ status: value })
+    this.sidebarValue = value;
   }
 
-  getUpdate(): Observable<any> {
-    return this.sidebar.asObservable();
+  getUpdate() {
+    return this.sidebarValue;
   }
 }
