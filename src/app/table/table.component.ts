@@ -22,9 +22,11 @@ export class TableComponent implements OnInit {
   @Input() projectTableType: string;
   @Input() columnOrder: number[];
   @Output() selectedResourceArrEvent = new EventEmitter();
+  @Output() deleteSelectedResourcesEvent = new EventEmitter();
 
   public renderTableDetail: any = [];
   public selectedResourceArr: any = [];
+  public addedProjectResourceArr: any = [];
 
   public isAddFeature: boolean = false;
   public isAddRow: boolean = false;
@@ -33,19 +35,16 @@ export class TableComponent implements OnInit {
   public newRowObject: any;
   public newRowObjectContent: any;
 
-  // public columnInfo: any[];
-  // public tableDetail: any[];
-
   constructor(private _resourceService: ResourceService) {}
 
   ngOnInit(): void {
     // this.renderTableDetail = this.tableDetail.slice(0);
-
-    if (this.tableType == 'resource') {
+    if (this.projectTableType == 'resource') {
       // this._resourceService.currentColumn.subscribe((column) => {
       //   this.column = column;
       //   console.log(this.column);
       // });
+      console.log('resource');
     }
   }
 
@@ -114,23 +113,42 @@ export class TableComponent implements OnInit {
     );
     this.renderTableDetail[index]['isSelected'] = check;
     if (check) {
-      this.selectedResourceArr = [
-        ...this.selectedResourceArr,
-        this.renderTableDetail[index],
-      ];
+      if (this.projectTableType == 'resourceTable') {
+        this.selectedResourceArr = this.addSelectedResource(
+          this.selectedResourceArr,
+          this.renderTableDetail[index]
+        );
+      }
+      if (this.projectTableType == 'selectedTable') {
+        this.addedProjectResourceArr = this.addSelectedResource(
+          this.addedProjectResourceArr,
+          this.renderTableDetail[index]
+        );
+      }
     } else {
       this.selectedResourceArr = this.selectedResourceArr.filter(
         (r: any) => r.resourceId != id
       );
     }
+  }
 
-    console.log(this.selectedResourceArr);
+  addSelectedResource(resourceArr: any[], resource: any) {
+    return [...resourceArr, resource];
   }
 
   sendSelectedResourceArr() {
     // console.log('Send data');
     if (this.selectedResourceArr.length > 0) {
       this.selectedResourceArrEvent.emit(this.selectedResourceArr);
+      this.selectedResourceArr = [];
+    }
+  }
+
+  sendSelectedDeletedResourceArr() {
+    // console.log('delete row event click from header');
+    if (this.addedProjectResourceArr.length > 0) {
+      this.deleteSelectedResourcesEvent.emit(this.addedProjectResourceArr);
+      this.addedProjectResourceArr = [];
     }
   }
 }

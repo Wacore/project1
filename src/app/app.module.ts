@@ -23,6 +23,7 @@ import { SideNavbarComponent } from './side-navbar/side-navbar.component';
 import { ResourceComponent } from './resource/resource.component';
 import { ProjectComponent } from './project/project.component';
 import { NotFoundComponent } from './not-found/not-found.component';
+import { ProjectNamePipe } from './project-name.pipe';
 
 @NgModule({
   declarations: [
@@ -39,6 +40,7 @@ import { NotFoundComponent } from './not-found/not-found.component';
     ResourceComponent,
     ProjectComponent,
     NotFoundComponent,
+    ProjectNamePipe,
   ],
   imports: [
     BrowserModule,

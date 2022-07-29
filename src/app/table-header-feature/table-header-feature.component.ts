@@ -3,7 +3,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 @Component({
   selector: 'app-table-header-feature',
   templateUrl: './table-header-feature.component.html',
-  styleUrls: ['./table-header-feature.component.css']
+  styleUrls: ['./table-header-feature.component.css'],
 })
 export class TableHeaderFeatureComponent implements OnInit {
   @Input('isAddFeature') isAddFeature: boolean;
@@ -16,12 +16,11 @@ export class TableHeaderFeatureComponent implements OnInit {
   @Output() addRowEvent = new EventEmitter();
   @Output() isSelectAllRowsEvent = new EventEmitter();
   @Output() clickAddResourcesEvent = new EventEmitter();
+  @Output() clcikDeleteSelectedResourcesEvent = new EventEmitter();
 
+  constructor() {}
 
-  constructor() { }
-
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   onAddClick() {
     this.isAddFeature = !this.isAddFeature;
@@ -33,12 +32,15 @@ export class TableHeaderFeatureComponent implements OnInit {
 
   isSelectAllRows(value: boolean) {
     // console.log(value);
-    this.isSelectAllRowsEvent.emit(value)
+    this.isSelectAllRowsEvent.emit(value);
   }
 
   onClickAddResources() {
     this.clickAddResourcesEvent.emit();
   }
 
-
+  onClickDeleteResources() {
+    console.log('Delete resource');
+    this.clcikDeleteSelectedResourcesEvent.emit();
+  }
 }

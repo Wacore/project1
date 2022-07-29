@@ -3,6 +3,7 @@ import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
 import { ColumnInfo } from '../column';
 import { SidebarService } from '../sidebar.service';
 import { ProjectService } from '../project.service';
+import { project } from '../project';
 
 @Component({
   selector: 'app-project',
@@ -21,6 +22,8 @@ export class ProjectComponent implements OnInit {
   public resouceColumnInfo: ColumnInfo[] = [];
   public projectTableDetail: any = [];
   public projectColumnInfo: ColumnInfo[] = [];
+  public projectList: project[] = [];
+  public toggleProjectList: boolean = false;
 
   constructor(
     private _resourceService: ResourceService,
@@ -50,6 +53,9 @@ export class ProjectComponent implements OnInit {
         this.projectData.columnInfo,
       ];
     });
+
+    this.projectList = this._projectService.projectList;
+    console.log(this.projectList);
   }
 
   ngOnChange(changes: SimpleChanges) {}
@@ -69,15 +75,30 @@ export class ProjectComponent implements OnInit {
       return resource;
     });
 
-    this.resourceTableDetail =
-      this.filterResourcesFromResourceDetailTable(selectedIds);
-    // console.log('Selected resource:', this.selectedResourceTableDetail);
-    console.log(selectedIds);
+    this.resourceTableDetail = this.filterResourcesFromTable(
+      this.resourceTableDetail,
+      selectedIds
+    );
   }
 
-  filterResourcesFromResourceDetailTable(selectedIds: string[]) {
-    return this.resourceTableDetail.filter((resource: any) => {
+  filterResourcesFromTable(tableDetail: any[], selectedIds: string[]) {
+    return tableDetail.filter((resource: any) => {
       return !selectedIds.includes(resource.resourceId);
     });
+  }
+
+  deleteSelectedResourceFromSelectedTable(arr: any) {
+    const selectedIdsArr: string[] = [];
+    arr.map((resource: any) => {
+      resource.isSelected = false;
+      selectedIdsArr.push(resource.resourceId);
+      this.resourceTableDetail = [...this.resourceTableDetail, resource];
+      return resource;
+    });
+
+    this.projectTableDetail = this.filterResourcesFromTable(
+      this.projectTableDetail,
+      selectedIdsArr
+    );
   }
 }

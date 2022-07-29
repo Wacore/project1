@@ -46,6 +46,7 @@
         [projectTableFeatureType]="projectTableType"
         (isSelectAllRowsEvent)="allRowSelectionHandler($event)"
         (clickAddResourcesEvent)="sendSelectedResourceArr()"
+        (clcikDeleteSelectedResourcesEvent)="sendSelectedDeletedResourceArr()"
       ></app-table-header-feature>
       <!-- <app-table-header-feature [isAddFeature]="isAddFeature" [type]="tableType"
                 [projectTableFeatureType]="projectTableType" (isSelectAllRowsEvent)="rowSelectionHandler($event)">
