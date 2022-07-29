@@ -15,6 +15,13 @@ export class ResourceComponent implements OnInit {
   public columnInfo: any[] = [];
   public tableDetail: any = [];
   public columnOrder: number[];
+  public isAddFeature: boolean = false;
+  public isAddRow: boolean = false;
+  public isAddColumn: boolean = false;
+  public renderTableDetail: any = [];
+  public newRowObject: any;
+  public newRowObjectContent: any;
+  private resourceId: number;
 
   constructor(
     private _resourceService: ResourceService,
@@ -24,18 +31,14 @@ export class ResourceComponent implements OnInit {
   ngOnInit(): void {
     this._resourceService.getResourceData().subscribe((result) => {
       this.resourceData = result;
-
-      // this.resourceData = this._resourceService.getData();
       [this.columnInfo, this.tableDetail] = [
         this.resourceData.columnInfo,
         this.resourceData.tableDetail,
       ];
       this.columnInfo = this._resourceService.uniqueColumnInfo(this.columnInfo);
       this.getColumnSet();
-
-      // console.log(this.columnInfo, this.tableDetail);
-      this._resourceService.updateColumnInfo(this.columnInfo);
-      this._resourceService.updateTableDetail(this.tableDetail);
+      this.renderTableDetail = this.tableDetail.slice();
+      // this._resourceService.updateColumnInfo(this.columnInfo);
     });
   }
 
@@ -43,5 +46,60 @@ export class ResourceComponent implements OnInit {
     const columnOrderArr: number[] = [];
     this.columnInfo.map((c) => columnOrderArr.push(c.id));
     this.columnOrder = columnOrderArr.sort();
+  }
+
+  addResourceRowHandler(value: boolean) {
+    this.isAddRow = value;
+    this._resourceService.postResource().subscribe((res) => {
+      this.resourceId = res.id;
+    });
+
+    const content: any = {};
+    this.columnOrder.map((c) => {
+      content[c] = '';
+    });
+
+    this.newRowObjectContent = content;
+  }
+
+  confirmResourceHandler() {
+    this.newRowObject = {
+      resourceId: this.resourceId,
+      content: this.newRowObjectContent,
+    };
+
+    this.renderTableDetail.push(this.newRowObject);
+
+    for (const columnId in this.newRowObjectContent) {
+      this._resourceService
+        .setEntry(
+          this.resourceId,
+          parseInt(columnId),
+          this.newRowObjectContent[columnId]
+        )
+        .subscribe((res) => console.log(res));
+    }
+    this.newRowObjectContent = {};
+    this.isAddRow = false;
+  }
+
+  resetResourceRowHandler() {
+    this.newRowObjectContent = {};
+    this.isAddRow = false;
+    this._resourceService.deleteResource(this.resourceId).subscribe((res) => {
+      console.log(res);
+      console.log('deleted row');
+    });
+    this.resourceId = 0;
+  }
+
+  searchResourceHandler(term: string) {
+    if (!term) {
+      this.renderTableDetail = this.tableDetail;
+    } else {
+      this.renderTableDetail = this.renderTableDetail.filter((col: any) => {
+        return Object.values(col.content).includes(term);
+      });
+    }
   }
 }

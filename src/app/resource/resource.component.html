@@ -1,6 +1,3 @@
-{{ tableDetail | json }}
-{{ columnInfo | json }}
-
 <!-- <div
   class="grid grid-cols-1 justify-center items-start pt-5 w-3/4 mx-auto transition-transform ease-in duration-300"
   [ngClass]="{ 'translate-x-1/4': sidebarSerive.getUpdate() }"
@@ -16,5 +13,129 @@
     [columnInfo]="columnInfo"
     [tableDetail]="tableDetail | async"
     [columnOrder]="columnOrder"
-  ></app-table>
-</div> -->
+  ></app-table> -->
+<!-- </div> -->
+<div
+  class="grid grid-cols-1 justify-center items-start pt-5 w-3/4 mx-auto transition-transform ease-in duration-300"
+  [ngClass]="{ 'translate-x-1/4': sidebarSerive.getUpdate() }"
+>
+  <div class="section flex items-start h-screen justify-center">
+    <div
+      class="table-container w-10/12 max-w-screen-xl border-gray-400 border-2"
+    >
+      <div
+        class="table-header flex justify-between items-center bg-gray-400 p-2"
+      >
+        <div
+          *ngIf="tableType == 'resource'"
+          class="search-bar flex items-center"
+        >
+          <input
+            type="text"
+            name="searchItem"
+            id="searchItem"
+            placeholder="Search"
+            class="p-1"
+            #searchTerm
+            (keyup.enter)="searchResourceHandler(searchTerm.value)"
+          />
+          <button>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-8 w-8 p-1 text-white bg-orange-400"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+              (click)="searchResourceHandler(searchTerm.value)"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+              />
+            </svg>
+          </button>
+        </div>
+        <h2 class="table-title">{{ tableType | titlecase }} Catalog</h2>
+        <!-- <app-table-header-feature [isAddFeature]="isAddFeature" [type]="tableType"
+                (addRowEvent)="addResourceRowHandler($event)"></app-table-header-feature> -->
+        <app-table-header-feature
+          [isAddFeature]="isAddFeature"
+          [type]="tableType"
+          (addRowEvent)="addResourceRowHandler($event)"
+        ></app-table-header-feature>
+        <!-- <app-table-header-feature [isAddFeature]="isAddFeature" [type]="tableType"
+                [projectTableFeatureType]="projectTableType" (isSelectAllRowsEvent)="rowSelectionHandler($event)">
+            </app-table-header-feature> -->
+      </div>
+      <div class="table-body h-96 overflow-scroll">
+        <app-table-data-header [header]="columnInfo"></app-table-data-header>
+        <div class="table-details">
+          <app-table-data-row
+            *ngFor="let row of renderTableDetail"
+            [data]="row.content"
+            [tableType]="tableType"
+            [resourceId]="row.resourceId"
+            [columnOrder]="columnOrder"
+            [isSelected]="row.isSelected"
+          >
+          </app-table-data-row>
+          <div class="detail-row flex items-center" *ngIf="isAddRow">
+            <div
+              class="table-header-column flex-1 p-2"
+              *ngFor="let input of columnOrder.slice(0, -1)"
+            >
+              <input
+                [(ngModel)]="newRowObjectContent[input]"
+                type="text"
+                [name]="input.toString()"
+                [id]="input"
+                class="border-orange-400 border-2 w-full"
+              />
+            </div>
+            <div class="table-header-column flex-1 p-2 flex">
+              <button (click)="confirmResourceHandler()">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-5 w-5"
+                  viewBox="0 0 20 20"
+                  fill="orange"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+              </button>
+              <button (click)="resetResourceRowHandler()">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-5 w-5"
+                  viewBox="0 0 20 20"
+                  fill="orange"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+              </button>
+              <input
+                type="text"
+                [(ngModel)]="
+                  newRowObjectContent[columnOrder[columnOrder.length - 1]]
+                "
+                [name]="columnOrder[columnOrder.length - 1].toString()"
+                [id]="columnOrder[columnOrder.length - 1].toString()"
+                class="border-orange-400 border-2 w-full"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

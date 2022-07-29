@@ -3,7 +3,7 @@ import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 @Component({
   selector: 'app-table-data-row',
   templateUrl: './table-data-row.component.html',
-  styleUrls: ['./table-data-row.component.css']
+  styleUrls: ['./table-data-row.component.css'],
 })
 export class TableDataRowComponent implements OnInit {
   @Input('data') data: string;
@@ -14,12 +14,9 @@ export class TableDataRowComponent implements OnInit {
   @Output() selectRowEvent = new EventEmitter();
   public newRowObject = {};
 
-  constructor() {
+  constructor() {}
 
-  }
-
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   selectRowHandler(check: boolean, id: string) {
     this.selectRowEvent.emit({ id, check });

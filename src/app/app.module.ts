@@ -1,6 +1,7 @@
 import { ResourceService } from './resource.service';
 import { UserService } from './user.service';
 import { AuthGuard } from './auth-guard.service';
+import { ProjectService } from './project.service';
 
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
@@ -53,15 +54,15 @@ import { NotFoundComponent } from './not-found/not-found.component';
         component: ResourceComponent,
         canActivate: [AuthGuard],
       },
-      // {
-      //   path: 'project',
-      //   component: ProjectComponent,
-      //   canActivate: [AuthGuard],
-      // },
+      {
+        path: 'project',
+        component: ProjectComponent,
+        canActivate: [AuthGuard],
+      },
       { path: '**', component: NotFoundComponent },
     ]),
   ],
-  providers: [ResourceService, UserService, AuthGuard],
+  providers: [ResourceService, UserService, AuthGuard, ProjectService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

@@ -1,21 +1,48 @@
-{{ selectedResourceTableDetail | json }}
 <div
   class="grid-cols-2 gap-2 grid justify-center items-start w-screen pt-5 mx-auto transition-transform ease-in duration-300"
-  [ngClass]="{ 'translate-x-1/4': sidebarService.getUpdate() }"
 >
-  <!-- <app-table
+  <app-table
     [tableType]="tableType"
     [tableDetail]="resourceTableDetail"
-    [columnInfo]="columnInfo"
+    [columnInfo]="resouceColumnInfo"
     (selectedResourceArrEvent)="getSelectedResourceArr($event)"
     [projectTableType]="'resourceTable'"
     [columnOrder]="columnOrder"
   ></app-table>
+
   <app-table
     [tableType]="tableType"
-    [tableDetail]="selectedResourceTableDetail"
-    [columnInfo]="columnInfo"
+    [tableDetail]="projectTableDetail"
+    [columnInfo]="projectColumnInfo"
     [projectTableType]="'selectedTable'"
     [columnOrder]="columnOrder"
-  ></app-table> -->
+  ></app-table>
+  <div class="text-center">
+    <a
+      routerLink="/resource"
+      class="block text-blue-400 hover:text-blue-600 transition ease-in duration-150"
+      >Edit Resource</a
+    >
+  </div>
+
+  <div class="flex justify-center">
+    <button class="flex items-center py-1 px-2 bg-orange-400 text-white">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-5 w-5"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+        stroke-width="2"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M5 13l4 4L19 7"
+        /></svg
+      >Submit
+    </button>
+  </div>
 </div>
+
+<!-- [ngClass]="{ 'translate-x-1/4': sidebarService.getUpdate() }" -->

@@ -1,5 +1,12 @@
 import { ResourceService } from './../resource.service';
-import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnInit,
+  Output,
+  EventEmitter,
+  SimpleChanges,
+} from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 @Component({
@@ -33,8 +40,6 @@ export class TableComponent implements OnInit {
 
   ngOnInit(): void {
     // this.renderTableDetail = this.tableDetail.slice(0);
-    // console.log(this.tableDetail, this.columnInfo);
-    console.log(this.tableDetail);
 
     if (this.tableType == 'resource') {
       // this._resourceService.currentColumn.subscribe((column) => {
@@ -42,16 +47,18 @@ export class TableComponent implements OnInit {
       //   console.log(this.column);
       // });
     }
-
-    console.log(this._resourceService.data);
   }
 
-  // ngOnChanges(changes: SimpleChanges) {
-  //   // only run when property "data" changed
-  //   if (changes['tableDetail']) {
-  //     console.log(this.tableDetail);
-  //   }
-  // }
+  ngOnChanges(changes: SimpleChanges) {
+    // only run when property "data" changed
+    if (changes['tableDetail']) {
+      this.tableDetail = this.tableDetail;
+      this.renderTableDetail = this.tableDetail.slice();
+    }
+    if (changes['columnInfo']) {
+      this.columnInfo = this.columnInfo;
+    }
+  }
 
   // Methods for Resource Table
   // handle the add row event to toggle displaying the input row
@@ -116,6 +123,8 @@ export class TableComponent implements OnInit {
         (r: any) => r.resourceId != id
       );
     }
+
+    console.log(this.selectedResourceArr);
   }
 
   sendSelectedResourceArr() {
