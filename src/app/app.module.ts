@@ -24,6 +24,9 @@ import { ResourceComponent } from './resource/resource.component';
 import { ProjectComponent } from './project/project.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { ProjectNamePipe } from './project-name.pipe';
+import { ProjectSelectorComponent } from './project-selector/project-selector.component';
+import { FormulaComponent } from './formula/formula.component';
+import { TemplateComponent } from './template/template.component';
 
 @NgModule({
   declarations: [
@@ -41,6 +44,9 @@ import { ProjectNamePipe } from './project-name.pipe';
     ProjectComponent,
     NotFoundComponent,
     ProjectNamePipe,
+    ProjectSelectorComponent,
+    FormulaComponent,
+    TemplateComponent,
   ],
   imports: [
     BrowserModule,
@@ -59,6 +65,16 @@ import { ProjectNamePipe } from './project-name.pipe';
       {
         path: 'project',
         component: ProjectComponent,
+        canActivate: [AuthGuard],
+      },
+      {
+        path: 'formula',
+        component: FormulaComponent,
+        canActivate: [AuthGuard],
+      },
+      {
+        path: 'template',
+        component: TemplateComponent,
         canActivate: [AuthGuard],
       },
       { path: '**', component: NotFoundComponent },

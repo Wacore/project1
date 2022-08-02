@@ -10,7 +10,7 @@ export class SideNavbarComponent implements OnInit {
   public routes = [
     { name: 'Resource', link: '/' },
     { name: 'Project', link: '/project' },
-    { name: 'Formula', link: '/#' },
+    { name: 'Formula', link: '/formula' },
   ];
   @Input() isSideBarOpen: boolean = false;
   @Output() toggleSideBarEvent = new EventEmitter();

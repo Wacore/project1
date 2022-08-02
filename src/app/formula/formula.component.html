@@ -1,0 +1,14 @@
+<div
+  class="grid grid-cols-1 justify-center items-start pt-5 w-3/4 mx-auto transition-transform ease-in duration-300"
+>
+  <app-project-selector
+    (selectProjectEvent)="projectSelectionHandler($event)"
+  ></app-project-selector>
+  <app-table
+    [tableType]="tableType"
+    [tableDetail]="projectTableData"
+    [columnInfo]="projectColumnInfo"
+    [columnOrder]="columnOrder"
+    [projectId]="projectId"
+  ></app-table>
+</div>

@@ -1,0 +1,8 @@
+1. The JSON string sent from the API has an error which causes JSON can't parse the string.
+
+2. There is no router for the web app to get the list of projects.
+
+3. Missing router to handle edit request on the template page.
+
+4. Should we add a delete template button on the template page? 
+

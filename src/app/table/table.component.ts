@@ -7,7 +7,8 @@ import {
   EventEmitter,
   SimpleChanges,
 } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, filter, Observable } from 'rxjs';
+import { ProjectService } from '../project.service';
 
 @Component({
   selector: 'app-table',
@@ -21,6 +22,8 @@ export class TableComponent implements OnInit {
   @Input() tableDetail: any;
   @Input() projectTableType: string;
   @Input() columnOrder: number[];
+  @Input() projectId: number;
+  @Input() postSelectedResourceFunc: (arr: any) => void;
   @Output() selectedResourceArrEvent = new EventEmitter();
   @Output() deleteSelectedResourcesEvent = new EventEmitter();
 
@@ -35,7 +38,12 @@ export class TableComponent implements OnInit {
   public newRowObject: any;
   public newRowObjectContent: any;
 
-  constructor(private _resourceService: ResourceService) {}
+  public touchedFormulaRowArr: any[] = [];
+
+  constructor(
+    private _resourceService: ResourceService,
+    private _projectService: ProjectService
+  ) {}
 
   ngOnInit(): void {
     // this.renderTableDetail = this.tableDetail.slice(0);
@@ -46,6 +54,7 @@ export class TableComponent implements OnInit {
       // });
       console.log('resource');
     }
+    console.log(this.projectId);
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -126,9 +135,15 @@ export class TableComponent implements OnInit {
         );
       }
     } else {
-      this.selectedResourceArr = this.selectedResourceArr.filter(
-        (r: any) => r.resourceId != id
-      );
+      if (this.projectTableType == 'resourceTable') {
+        this.selectedResourceArr = this.selectedResourceArr.filter(
+          (r: any) => r.resourceId != id
+        );
+      } else {
+        this.addedProjectResourceArr = this.addedProjectResourceArr.filter(
+          (r: any) => r.resourceId != id
+        );
+      }
     }
   }
 
@@ -150,5 +165,23 @@ export class TableComponent implements OnInit {
       this.deleteSelectedResourcesEvent.emit(this.addedProjectResourceArr);
       this.addedProjectResourceArr = [];
     }
+  }
+
+  sendEditedDataFromFormulaPage(arr: any[]) {
+    for (const item of arr) {
+      if (item.isTouched) {
+        this.touchedFormulaRowArr.push(item);
+      }
+    }
+
+    console.log(this.touchedFormulaRowArr);
+  }
+
+  clickPostEditedFormulaHandler() {
+    this.touchedFormulaRowArr.map((item) => {
+      this._projectService
+        .setEntry(item.resourceId, item.columnId, item.data)
+        .subscribe((res) => console.log(res));
+    });
   }
 }

@@ -27,3 +27,26 @@
     />{{ data[columnId] }}
   </div>
 </div>
+
+<div
+  *ngIf="tableType == 'quantity survey'"
+  class="detail-row flex items-center"
+>
+  <div
+    class="table-header-column flex-1 p-2"
+    *ngFor="let cell of rowDatasArr; let index = index"
+  >
+    <span
+      (click)="cell.isEdit = !cell.isEdit; cell.isTouched = true"
+      *ngIf="!cell.isEdit"
+      >{{ cell.data }}</span
+    >
+    <input
+      *ngIf="cell.isEdit"
+      type="text"
+      [(ngModel)]="rowDatasArr[index]['data']"
+      value="cell.data"
+      (blur)="cell.isEdit = !cell.isEdit; touchedFormulaRowHandler()"
+    />
+  </div>
+</div>

@@ -22,8 +22,6 @@ export class ProjectComponent implements OnInit {
   public resouceColumnInfo: ColumnInfo[] = [];
   public projectTableDetail: any = [];
   public projectColumnInfo: ColumnInfo[] = [];
-  public projectList: project[] = [];
-  public toggleProjectList: boolean = false;
 
   constructor(
     private _resourceService: ResourceService,
@@ -31,6 +29,7 @@ export class ProjectComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.getProjectData();
     this.resourceData = this._resourceService
       .getResourceData()
       .subscribe((res) => {
@@ -43,19 +42,16 @@ export class ProjectComponent implements OnInit {
         this.resouceColumnInfo = this._resourceService.uniqueColumnInfo(
           this.resouceColumnInfo
         );
+        const projectResouceIds: any[] = [];
+        this.projectTableDetail.map((resource: any) =>
+          projectResouceIds.push(resource.resourceId)
+        );
+
+        this.resourceTableDetail = this.resourceTableDetail.filter(
+          (resource: any) => !projectResouceIds.includes(resource.resourceId)
+        );
         this.getColumnSet();
       });
-
-    this._projectService.getProject(this.projectId).subscribe((res) => {
-      this.projectData = res;
-      [this.projectTableDetail, this.projectColumnInfo] = [
-        this.projectData.tableDetail,
-        this.projectData.columnInfo,
-      ];
-    });
-
-    this.projectList = this._projectService.projectList;
-    console.log(this.projectList);
   }
 
   ngOnChange(changes: SimpleChanges) {}
@@ -69,10 +65,11 @@ export class ProjectComponent implements OnInit {
   getSelectedResourceArr(arr: any) {
     // this.resourceTableDetail = arr;
     const selectedIds: string[] = [];
-    this.projectTableDetail = arr.map((resource: any) => {
+
+    arr.map((resource: any) => {
       resource.isSelected = false;
       selectedIds.push(resource.resourceId);
-      return resource;
+      this.projectTableDetail = [...this.projectTableDetail, resource];
     });
 
     this.resourceTableDetail = this.filterResourcesFromTable(
@@ -93,6 +90,9 @@ export class ProjectComponent implements OnInit {
       resource.isSelected = false;
       selectedIdsArr.push(resource.resourceId);
       this.resourceTableDetail = [...this.resourceTableDetail, resource];
+      this._projectService
+        .deleteResourceFromProject(this.projectId, resource.resourceId)
+        .subscribe((res) => console.log(res));
       return resource;
     });
 
@@ -100,5 +100,30 @@ export class ProjectComponent implements OnInit {
       this.projectTableDetail,
       selectedIdsArr
     );
+  }
+
+  getProjectData() {
+    this._projectService.getProject(this.projectId).subscribe((res) => {
+      this.projectData = res;
+      [this.projectTableDetail, this.projectColumnInfo] = [
+        this.projectData.tableDetail,
+        this.projectData.columnInfo,
+      ];
+    });
+  }
+
+  // To send the data from the right table to the API
+  postSelectedResource(resourceArr: []) {
+    if (resourceArr.length) {
+      resourceArr.map((resource: any) => {
+        this._projectService
+          .postResourceToProject(this.projectId, resource.resourceId)
+          .subscribe((res) => console.log(res));
+      });
+    }
+  }
+
+  projectSelectionHandler(projectId: number) {
+    this.projectId = projectId;
   }
 }

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { map } from 'rxjs/operators';
-import { query } from '@angular/animations';
+import { project } from './project';
 
 @Injectable({
   providedIn: 'root',
@@ -38,8 +38,11 @@ export class ProjectService {
 
   public postResourceToProject(projectId: number, resourceId: number) {
     let headers = this.getHttpHeader();
-    let params = new HttpParams().appendAll({ projectId, resourceId });
-    this.http
+    let params = {
+      projectId,
+      resourceId,
+    };
+    return this.http
       .post(`${this.url}/addResourceToProject`, null, {
         headers,
         params,
@@ -47,9 +50,56 @@ export class ProjectService {
       })
       .pipe(map((res) => JSON.parse(res)));
   }
-}
 
-export interface project {
-  id: number;
-  name: string;
+  public deleteResourceFromProject(projectId: number, resourceId: number) {
+    let headers = this.getHttpHeader();
+    let params = {
+      projectId,
+      resourceId,
+    };
+
+    return this.http.post(`${this.url}/deleteResource`, null, {
+      headers,
+      params,
+      responseType: 'text',
+    });
+  }
+
+  public addTemplate(
+    projectId: number,
+    columnName: string,
+    columnType: string,
+    formula: string
+  ) {
+    let headers = this.getHttpHeader();
+    let params = {
+      projectId,
+      columnName,
+      columnType,
+      formula,
+    };
+    return this.http
+      .post(`${this.url}/addTemplate`, null, {
+        headers,
+        params,
+        responseType: 'text',
+      })
+      .pipe(map((res) => JSON.parse(res)));
+  }
+
+  public setEntry(resourceId: number, columnId: number, value: string) {
+    let headers = this.getHttpHeader();
+    let params = {
+      resourceId,
+      columnId,
+      value,
+    };
+    return this.http
+      .post(`${this.url}/setEntry`, null, {
+        headers,
+        params,
+        responseType: 'text',
+      })
+      .pipe(map((res) => JSON.parse(res)));
+  }
 }

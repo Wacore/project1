@@ -1,9 +1,9 @@
 <div
-  class="section flex items-start"
+  class="section items-center flex flex-col"
   [ngClass]="{
-    'justify-end': projectTableType == 'resourceTable',
+    'justify-end items-end': projectTableType == 'resourceTable',
     'justify-start': projectTableType == 'selectedTable',
-    'justify-center': tableType == 'resource'
+    ' items-center': tableType == 'quantity survey'
   }"
 >
   <div class="table-container w-10/12 max-w-screen-xl border-gray-400 border-2">
@@ -63,6 +63,7 @@
           [columnOrder]="columnOrder"
           [isSelected]="row.isSelected"
           (selectRowEvent)="rowSelectionHandler($event)"
+          (touchedFormulaRowEvent)="sendEditedDataFromFormulaPage($event)"
         >
         </app-table-data-row>
         <div class="detail-row flex items-center" *ngIf="isAddRow">
@@ -120,5 +121,57 @@
         </div>
       </div>
     </div>
+  </div>
+
+  <div *ngIf="projectTableType == 'selectedTable'" class="flex">
+    <button
+      (click)="postSelectedResourceFunc(addedProjectResourceArr)"
+      class="flex items-center py-1 px-2 bg-orange-400 text-white"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-5 w-5"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+        stroke-width="2"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M5 13l4 4L19 7"
+        /></svg
+      >Submit
+    </button>
+  </div>
+  <div
+    *ngIf="tableType === 'quantity survey'"
+    class="flex justify-around w-7/12 max-w-5xl mt-3"
+  >
+    <a
+      [routerLink]="['/template']"
+      [queryParams]="{ projectId: projectId }"
+      class="inline-block text-blue-500 hover:text-blue-400"
+      >Edit Quantity Survey Template</a
+    >
+    <button
+      (click)="clickPostEditedFormulaHandler()"
+      class="flex justify-center px-2 py-1 bg-orange-400 text-white"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-6 w-6"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+        stroke-width="2"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M5 13l4 4L19 7"
+        /></svg
+      >Submit
+    </button>
   </div>
 </div>

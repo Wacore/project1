@@ -38,7 +38,9 @@ export class ResourceComponent implements OnInit {
       this.columnInfo = this._resourceService.uniqueColumnInfo(this.columnInfo);
       this.getColumnSet();
       this.renderTableDetail = this.tableDetail.slice();
+      this.renderTableDetail.map((item: any) => (item.isEdit = false));
       // this._resourceService.updateColumnInfo(this.columnInfo);
+      console.log(this.renderTableDetail);
     });
   }
 
